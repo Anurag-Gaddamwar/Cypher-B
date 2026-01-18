@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "nodemon server.js",
+    "build": "node --check server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
