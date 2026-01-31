@@ -737,8 +737,30 @@ app.post('/generate-roadmap', async (req, res) => {
       return res.json(contextCache.get(cacheKey).data);
     }
 
-    const prompt = `Create a proper industry oriented learning roadmap for "${currentQuery.trim()}" role. Start from very basics to advaned level skills, the end user is a fresher.
-Format exactly as:
+    const prompt = `
+You are an expert industry curriculum designer.
+
+TASK:
+Create a proper industry-oriented learning roadmap for the role "${currentQuery.trim()}".
+
+IMPORTANT VALIDATION (MANDATORY):
+1. FIRST, determine whether the given role is a **genuine professional career** that:
+   - Typically requires formal education (college degree / diploma / structured professional training), AND
+   - Has a clearly defined industry skill stack (e.g., Software Engineer, Data Scientist, Mechanical Engineer, Chartered Accountant, Cybersecurity Analyst, AI Engineer, etc.)
+2. If the role does NOT meet the above criteria (random terms, vague roles, non-technical/non-professional jobs, blue-collar work, casual skills, or unclear inputs), DO NOT generate a roadmap.
+3. In such cases, output EXACTLY this single line and NOTHING ELSE:
+INVALID_ROLE
+
+STRICT GENERATION RULES (only if role is valid):
+- Start from absolute basics and go to advanced level.
+- Target audience is a fresher.
+- Topics must be DIRECTLY relevant to the given role.
+- DO NOT include web development, HTML, CSS, JavaScript, or unrelated technologies unless they are CORE requirements of the role.
+- Keep duration realistic (each topic must be 10+ days).
+- Include only popular Indian YouTube channels.
+- Do NOT add explanations, headings, numbering, or extra text.
+
+FORMAT (FOLLOW EXACTLY, NO DEVIATION):
 Topic Name - X days
    - YouTube Channel: Channel Name (https://youtube.com/...)
 Topic Name - X days
@@ -746,14 +768,12 @@ Topic Name - X days
 Topic Name - X days
    - YouTube Channel: Channel Name (https://youtube.com/...)
 
-Example [Strictly follow the format, do not deviate or add extra explanations even a single letter. This is just an example, do not copy the same topics.]:
-Data Structures - 20 days
-   - YouTube Channel: Neso Academy (https://youtube.com/...)
-Algorithms - 25 days
-   - YouTube Channel: CodeWithHarry (https://youtube.com/...)
-
-[NOTE: Include popular Indian YouTube channels. Keep days realistic for freshers (10+). No additional explanations.]`;
-
+DO NOT:
+- Add examples
+- Add summaries
+- Add extra blank lines
+- Add any text before or after the roadmap
+`;
     const response = await callGroqAPI([{ role: 'user', content: prompt }], 900);
 
 
@@ -857,3 +877,4 @@ app.listen(port, () => {
   console.log(`CypherAI Server running on port ${port}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+
