@@ -22,7 +22,7 @@ const groq = new Groq({
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(cors({
-  origin: ['https://cypherai-interview-prep.vercel.app', 'http://localhost:3000'],
+  origin: ['https://cypherai-interview-prep.vercel.app', 'http://localhost:3000', 'https://cypher-ai.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
@@ -877,4 +877,5 @@ app.listen(port, () => {
   console.log(`CypherAI Server running on port ${port}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+
 
